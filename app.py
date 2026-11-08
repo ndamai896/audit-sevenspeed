@@ -2,11 +2,65 @@
 import streamlit as st
 import pandas as pd
 
+# ==========================================
+# KONFIGURASI APLIKASI
+# ==========================================
+
 st.set_page_config(
-    page_title="Audit Sistem Informasi Sevenspeed",
-    page_icon="📊",
-    layout="wide"
+    page_title="Audit Sevenspeed | COBIT 5",
+    page_icon="🩵",
+    layout="wide",
+    initial_sidebar_state="expanded"
 )
+
+# ==========================================
+# TEMA SOFT BLUE / SKY BLUE
+# ==========================================
+
+st.markdown("""
+<style>
+.stApp {
+    background-color: #F5FAFF;
+}
+[data-testid="stSidebar"] {
+    background-color: #E5F2FF;
+}
+h1, h2, h3 {
+    color: #174B78;
+}
+p, label, .stMarkdown {
+    color: #365B7C;
+}
+div[data-testid="stMetric"] {
+    background-color: #E6F3FF;
+    padding: 18px;
+    border-radius: 12px;
+    border: 1px solid #C5E2FA;
+}
+.stButton > button,
+.stFormSubmitButton > button {
+    background-color: #65A9DD;
+    color: white;
+    border-radius: 9px;
+    border: none;
+    font-weight: bold;
+}
+.stButton > button:hover,
+.stFormSubmitButton > button:hover {
+    background-color: #2878B9;
+    color: white;
+}
+div[data-testid="stExpander"] {
+    background-color: #FFFFFF;
+    border: 1px solid #D4E9FA;
+    border-radius: 10px;
+}
+</style>
+""", unsafe_allow_html=True)
+
+# ==========================================
+# INSTRUMEN AUDIT COBIT 5
+# ==========================================
 
 instrumen = {
     "EDM": [
@@ -46,105 +100,334 @@ instrumen = {
     ]
 }
 
-st.title("📊 FORM AUDIT SISTEM INFORMASI SEVENSPEED")
-st.subheader("Kerangka Kerja COBIT 5")
-st.caption("Instrumen evaluasi sistem informasi berdasarkan lima domain COBIT 5.")
+# ==========================================
+# ANALISIS DAN REKOMENDASI
+# ==========================================
 
-st.info("Skala penilaian: 1 = Sangat tidak sesuai | 2 = Tidak sesuai | 3 = Cukup sesuai | 4 = Sesuai | 5 = Sangat sesuai")
+analisis_domain = {
+    "EDM": {
+        "analisis": "Pengawasan dan evaluasi manfaat sistem sudah berjalan cukup baik. Namun, dokumentasi pembagian tanggung jawab dan identifikasi risiko masih perlu ditingkatkan.",
+        "rekomendasi": "Membuat dokumentasi pembagian tanggung jawab, melakukan evaluasi kinerja sistem secara berkala, dan menyusun identifikasi risiko penggunaan sistem."
+    },
+    "APO": {
+        "analisis": "Perencanaan dan pengelolaan sistem telah mendukung kebutuhan operasional. Namun, pengelolaan risiko dan pembagian tanggung jawab masih perlu diperkuat.",
+        "rekomendasi": "Menyusun prosedur pengelolaan risiko, memperjelas tanggung jawab pengguna, serta meningkatkan dokumentasi perlindungan data."
+    },
+    "BAI": {
+        "analisis": "Penerapan sistem telah membantu kegiatan operasional. Namun, identifikasi kebutuhan dan dokumentasi perubahan sistem masih perlu ditingkatkan.",
+        "rekomendasi": "Mendokumentasikan kebutuhan pengguna, membuat prosedur persetujuan perubahan sistem, dan menyimpan hasil pengujian sistem."
+    },
+    "DSS": {
+        "analisis": "Operasional sistem sudah berjalan cukup baik, tetapi pencatatan gangguan, analisis masalah, dan pengaturan hak akses masih perlu diperbaiki.",
+        "rekomendasi": "Membuat prosedur penanganan gangguan, melakukan analisis penyebab masalah, serta menyusun jadwal pencadangan data."
+    },
+    "MEA": {
+        "analisis": "Pemantauan dan evaluasi sistem sudah dilakukan, tetapi belum sepenuhnya terstruktur dan terdokumentasi secara berkala.",
+        "rekomendasi": "Melakukan evaluasi kinerja sistem secara rutin, menyusun laporan pemantauan, dan meningkatkan pemeriksaan pengendalian internal."
+    }
+}
 
-with st.form("form_audit"):
-    st.header("Identitas Auditor")
-    auditor = st.text_input("Auditor")
-    responden = st.text_input("Responden")
-    unit_kerja = st.text_input("Unit kerja")
+# ==========================================
+# SIDEBAR NAVIGASI
+# ==========================================
 
-    hasil = []
+st.sidebar.markdown("# 🩵 SEVENSPEED")
+st.sidebar.caption("AUDIT SISTEM INFORMASI")
+st.sidebar.divider()
 
-    for domain, pertanyaan_list in instrumen.items():
-        st.divider()
-        st.header(f"DOMAIN {domain}")
+menu = st.sidebar.radio(
+    "MENU NAVIGASI",
+    [
+        "Dashboard",
+        "Form Audit",
+        "Hasil Audit",
+        "Analisis & Rekomendasi"
+    ]
+)
 
-        for i, pertanyaan in enumerate(pertanyaan_list, start=1):
-            kode = f"{domain}-{i:02d}"
-            st.subheader(kode)
-            st.write(pertanyaan)
+st.sidebar.divider()
+st.sidebar.info(
+    "Kerangka kerja: COBIT 5\n\n"
+    "Objek: Sevenspeed Kudus\n\n"
+    "Jumlah indikator: 25"
+)
 
-            skor = st.selectbox(
-                "Skor penilaian",
-                options=[1, 2, 3, 4, 5],
-                format_func=lambda x: {
-                    1: "1 - Sangat tidak sesuai",
-                    2: "2 - Tidak sesuai",
-                    3: "3 - Cukup sesuai",
-                    4: "4 - Sesuai",
-                    5: "5 - Sangat sesuai"
-                }[x],
-                key=f"skor_{kode}"
+# ==========================================
+# HEADER APLIKASI
+# ==========================================
+
+st.title("🩵 Audit Sistem Informasi Sevenspeed")
+st.caption(
+    "Aplikasi Evaluasi Sistem Informasi "
+    "Menggunakan Kerangka Kerja COBIT 5"
+)
+
+# ==========================================
+# DASHBOARD
+# ==========================================
+
+if menu == "Dashboard":
+
+    st.subheader("Dashboard Audit")
+
+    st.markdown("""
+    Selamat datang di aplikasi Audit Sistem Informasi Sevenspeed.
+    Aplikasi ini digunakan untuk melakukan penilaian berdasarkan
+    lima domain COBIT 5, yaitu EDM, APO, BAI, DSS, dan MEA.
+    """)
+
+    if "hasil_audit" in st.session_state:
+
+        df = st.session_state["hasil_audit"]
+        rekap = df.groupby("Domain").agg(
+            Total_Skor=("Skor", "sum"),
+            Rata_Rata=("Skor", "mean")
+        ).reset_index()
+
+        c1, c2, c3 = st.columns(3)
+        c1.metric("Jumlah Indikator", len(df))
+        c2.metric("Total Skor", int(df["Skor"].sum()))
+        c3.metric("Rata-rata Skor", f"{df['Skor'].mean():.2f}")
+
+        st.subheader("Ringkasan Penilaian Domain")
+        st.bar_chart(
+            rekap.set_index("Domain")[["Rata_Rata"]],
+            y="Rata_Rata",
+            y_label="Rata-rata skor"
+        )
+
+    else:
+        c1, c2, c3 = st.columns(3)
+        c1.metric("Jumlah Domain", "5")
+        c2.metric("Jumlah Indikator", "25")
+        c3.metric("Skala Penilaian", "1–5")
+
+        st.info(
+            "Belum terdapat hasil audit. "
+            "Silakan buka menu Form Audit untuk memulai penilaian."
+        )
+
+# ==========================================
+# FORM AUDIT
+# ==========================================
+
+elif menu == "Form Audit":
+
+    st.header("Form Audit Sistem Informasi")
+    st.write("Isi identitas dan lakukan penilaian pada seluruh indikator.")
+
+    st.info(
+        "Skala penilaian: 1 = Sangat tidak sesuai, "
+        "2 = Tidak sesuai, 3 = Cukup sesuai, "
+        "4 = Sesuai, 5 = Sangat sesuai."
+    )
+
+    with st.form("form_audit"):
+
+        st.subheader("Identitas Auditor")
+
+        auditor = st.text_input("Auditor")
+        responden = st.text_input("Responden")
+        unit_kerja = st.text_input("Unit kerja")
+
+        hasil = []
+
+        for domain, pertanyaan_list in instrumen.items():
+
+            st.divider()
+            st.subheader(f"DOMAIN {domain}")
+
+            for i, pertanyaan in enumerate(pertanyaan_list, start=1):
+
+                kode = f"{domain}-{i:02d}"
+
+                st.markdown(f"**{kode}**")
+                st.write(pertanyaan)
+
+                skor = st.selectbox(
+                    "Skor penilaian",
+                    [1, 2, 3, 4, 5],
+                    format_func=lambda x: {
+                        1: "1 - Sangat tidak sesuai",
+                        2: "2 - Tidak sesuai",
+                        3: "3 - Cukup sesuai",
+                        4: "4 - Sesuai",
+                        5: "5 - Sangat sesuai"
+                    }[x],
+                    key=f"skor_{kode}"
+                )
+
+                bukti = st.text_area(
+                    "Bukti",
+                    key=f"bukti_{kode}"
+                )
+
+                catatan = st.text_area(
+                    "Catatan",
+                    key=f"catatan_{kode}"
+                )
+
+                hasil.append({
+                    "Domain": domain,
+                    "Kode": kode,
+                    "Pertanyaan": pertanyaan,
+                    "Skor": skor,
+                    "Bukti": bukti,
+                    "Catatan": catatan
+                })
+
+        proses = st.form_submit_button(
+            "PROSES HASIL AUDIT",
+            use_container_width=True
+        )
+
+    if proses:
+
+        if not auditor.strip() or not responden.strip() or not unit_kerja.strip():
+
+            st.error(
+                "Mohon lengkapi identitas auditor, responden, "
+                "dan unit kerja."
             )
 
-            bukti = st.text_area("Bukti", key=f"bukti_{kode}")
-            catatan = st.text_area("Catatan", key=f"catatan_{kode}")
+        else:
 
-            hasil.append({
-                "Domain": domain,
-                "Kode": kode,
-                "Pertanyaan": pertanyaan,
-                "Skor": skor,
-                "Bukti": bukti,
-                "Catatan": catatan
-            })
+            df = pd.DataFrame(hasil)
 
-    proses = st.form_submit_button(
-        "PROSES HASIL AUDIT",
-        use_container_width=True
-    )
+            st.session_state["hasil_audit"] = df
+            st.session_state["identitas"] = {
+                "Auditor": auditor,
+                "Responden": responden,
+                "Unit kerja": unit_kerja
+            }
 
-if proses:
-    if not auditor.strip() or not responden.strip() or not unit_kerja.strip():
-        st.error("Mohon lengkapi identitas auditor, responden, dan unit kerja.")
+            st.success(
+                "Hasil penilaian berhasil diproses. "
+                "Silakan buka menu Hasil Audit."
+            )
+
+# ==========================================
+# HASIL AUDIT
+# ==========================================
+
+elif menu == "Hasil Audit":
+
+    st.header("Hasil Audit COBIT 5")
+
+    if "hasil_audit" not in st.session_state:
+
+        st.warning("Belum ada hasil audit yang diproses.")
+
     else:
-        df = pd.DataFrame(hasil)
-        st.session_state["hasil_audit"] = df
-        st.session_state["identitas"] = {
-            "Auditor": auditor,
-            "Responden": responden,
-            "Unit kerja": unit_kerja
-        }
 
-if "hasil_audit" in st.session_state:
-    df = st.session_state["hasil_audit"]
-    identitas = st.session_state["identitas"]
+        df = st.session_state["hasil_audit"]
+        identitas = st.session_state["identitas"]
 
-    st.divider()
-    st.header("HASIL AUDIT COBIT 5")
+        c1, c2, c3 = st.columns(3)
 
-    col1, col2, col3 = st.columns(3)
-    col1.metric("Jumlah indikator", len(df))
-    col2.metric("Total skor", int(df["Skor"].sum()))
-    col3.metric("Rata-rata skor", round(df["Skor"].mean(), 2))
+        c1.metric("Jumlah Indikator", len(df))
+        c2.metric("Total Skor", int(df["Skor"].sum()))
+        c3.metric("Rata-rata", f"{df['Skor'].mean():.2f}")
 
-    st.subheader("Rekapitulasi per Domain")
-    rekap = df.groupby("Domain").agg(
-        Jumlah_Indikator=("Skor", "count"),
-        Total_Skor=("Skor", "sum"),
-        Rata_Rata=("Skor", "mean")
-    ).reset_index()
+        st.subheader("Identitas Audit")
+        st.json(identitas)
 
-    st.dataframe(rekap.round(2), use_container_width=True)
+        rekap = df.groupby("Domain").agg(
+            Jumlah_Indikator=("Skor", "count"),
+            Total_Skor=("Skor", "sum"),
+            Rata_Rata=("Skor", "mean")
+        ).reset_index()
 
-    st.subheader("Grafik Rata-rata Penilaian")
-    grafik = rekap.set_index("Domain")[["Rata_Rata"]]
-    st.bar_chart(grafik, y="Rata_Rata", y_label="Rata-rata skor")
+        st.subheader("Rekapitulasi Hasil Audit")
+        st.dataframe(
+            rekap.round(2),
+            use_container_width=True,
+            hide_index=True
+        )
 
-    st.subheader("Detail Hasil Penilaian")
-    st.dataframe(df, use_container_width=True)
+        st.subheader("Grafik Rata-rata Penilaian")
+        st.bar_chart(
+            rekap.set_index("Domain")[["Rata_Rata"]],
+            y="Rata_Rata",
+            y_label="Rata-rata skor"
+        )
 
-    st.subheader("Identitas Audit")
-    st.json(identitas)
+        st.subheader("Detail Hasil Penilaian")
+        st.dataframe(df, use_container_width=True)
 
-    st.download_button(
-        "Unduh hasil audit CSV",
-        data=df.to_csv(index=False).encode("utf-8-sig"),
-        file_name="hasil_audit_sevenspeed.csv",
-        mime="text/csv"
-    )
+        st.download_button(
+            "📥 Unduh Hasil Audit CSV",
+            data=df.to_csv(index=False).encode("utf-8-sig"),
+            file_name="hasil_audit_sevenspeed.csv",
+            mime="text/csv"
+        )
+
+# ==========================================
+# ANALISIS DAN REKOMENDASI
+# ==========================================
+
+elif menu == "Analisis & Rekomendasi":
+
+    st.header("Analisis dan Rekomendasi Perbaikan")
+
+    if "hasil_audit" not in st.session_state:
+
+        st.warning(
+            "Silakan isi dan proses form audit terlebih dahulu."
+        )
+
+    else:
+
+        df = st.session_state["hasil_audit"]
+
+        rekap = df.groupby("Domain").agg(
+            Rata_Rata=("Skor", "mean")
+        ).reset_index()
+
+        for _, baris in rekap.iterrows():
+
+            domain = baris["Domain"]
+            skor = baris["Rata_Rata"]
+
+            with st.expander(
+                f"Domain {domain} — Rata-rata {skor:.2f}",
+                expanded=True
+            ):
+
+                st.markdown("**Analisis:**")
+                st.write(analisis_domain[domain]["analisis"])
+
+                st.markdown("**Rekomendasi Perbaikan:**")
+                st.write(analisis_domain[domain]["rekomendasi"])
+
+        st.divider()
+        st.subheader("Kesimpulan Hasil Audit")
+
+        rata = df["Skor"].mean()
+
+        tertinggi = rekap.loc[rekap["Rata_Rata"].idxmax()]
+        terendah = rekap.loc[rekap["Rata_Rata"].idxmin()]
+
+        st.write(
+            f"Berdasarkan penilaian terhadap {len(df)} indikator "
+            f"pada lima domain COBIT 5, diperoleh total skor "
+            f"{df['Skor'].sum()} dengan rata-rata {rata:.2f}."
+        )
+
+        st.write(
+            f"Domain dengan rata-rata tertinggi adalah "
+            f"{tertinggi['Domain']} sebesar "
+            f"{tertinggi['Rata_Rata']:.2f}."
+        )
+
+        st.write(
+            f"Domain dengan rata-rata terendah adalah "
+            f"{terendah['Domain']} sebesar "
+            f"{terendah['Rata_Rata']:.2f}."
+        )
+
+        st.caption(
+            "Interpretasi dan rekomendasi ini merupakan "
+            "contoh analisis berdasarkan hasil penilaian. "
+            "Data simulasi bukan hasil wawancara lapangan."
+        )
