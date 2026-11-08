@@ -8,7 +8,7 @@ import pandas as pd
 
 st.set_page_config(
     page_title="Audit Sevenspeed | COBIT 5",
-    page_icon="🩵",
+    page_icon="☁️",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -131,7 +131,7 @@ analisis_domain = {
 # SIDEBAR NAVIGASI
 # ==========================================
 
-st.sidebar.markdown("# 🩵 SEVENSPEED")
+st.sidebar.markdown("# ☁️ SEVENSPEED")
 st.sidebar.caption("AUDIT SISTEM INFORMASI")
 st.sidebar.divider()
 
@@ -156,7 +156,7 @@ st.sidebar.info(
 # HEADER APLIKASI
 # ==========================================
 
-st.title("🩵 Audit Sistem Informasi Sevenspeed")
+st.title("☁️ Audit Sistem Informasi Sevenspeed")
 st.caption(
     "Aplikasi Evaluasi Sistem Informasi "
     "Menggunakan Kerangka Kerja COBIT 5"
