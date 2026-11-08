@@ -425,9 +425,3 @@ elif menu == "Analisis & Rekomendasi":
             f"{terendah['Domain']} sebesar "
             f"{terendah['Rata_Rata']:.2f}."
         )
-
-        st.caption(
-            "Interpretasi dan rekomendasi ini merupakan "
-            "contoh analisis berdasarkan hasil penilaian. "
-            "Data simulasi bukan hasil wawancara lapangan."
-        )
